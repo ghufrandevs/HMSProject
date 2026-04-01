@@ -152,8 +152,16 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                     assignedDoctors[i] = Console.ReadLine();
                                     admitted[i] = true;
                                     visitCount[i]++;
-                                    Console.WriteLine("Patient admitted successfully and assigned to : "+ assignedDoctors[i]);
-                                    Console.WriteLine("This patient has been admitted "+ visitCount[i]+ " times");
+                                    if (visitCount[i] ==1)
+                                    {
+                                        Console.WriteLine("Patient admitted for the first time and assigned with "+ assignedDoctors[i]);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Patient admitted successfully and assigned to : " + assignedDoctors[i]);
+                                        Console.WriteLine("This patient has been admitted " + visitCount[i] + " times");
+                                    }
+                                       
                                     break;
 
                                 }
@@ -200,6 +208,11 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                             {
                                                 amount = double.Parse(Console.ReadLine());
                                                 validA = true;
+                                                if(amount <= 0)
+                                                {
+                                                    Console.WriteLine(" the amount is invalid ! ");
+                                                }
+
                                             }
                                             catch (Exception ex)
                                             {
@@ -228,6 +241,10 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                             {
                                                 medicalCharge = double.Parse(Console.ReadLine());
                                                 valid = true; //out from loop
+                                                if(medicalCharge <= 0)
+                                                {
+                                                    Console.WriteLine("the amount is invalid !");
+                                                }
                                             }
                                             catch
                                             {
