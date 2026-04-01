@@ -91,7 +91,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("8.Search Patients by Department ");
                 Console.WriteLine("9.Billing Report");
                 
-                Console.WriteLine("11.Exit");
+                Console.WriteLine("10.Exit");
                 int option = 0 ;
 
                 try
@@ -519,58 +519,31 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                         break;
 
+                        
+
+
                         case 10:
-                        Console.WriteLine("Enter name or ID: ");
-                         string keys= Console.ReadLine();
-                        bool foundS= false;
-                        for(int i = 0;i<=lastPatientIndex;i++)
+
+                        Console.WriteLine("Thank you for using the Managing health care System,are sure to want to exit (Yes/No)");
+                        string input = Console.ReadLine().ToLower();
+
+                        if (input=="yes")
                         {
-                            if (keys == patientIDs[i] || keys == patientNames[i])
-                            {
-                                foundS = true;
-
-                                if (hasAppointment[i] ==true)
-                                {
-                                    Console.WriteLine("Patient already has an appointment on " + appointmentDates[i]);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("");
-                                }
-
-                            }
-
+                            exit = true;
+                            Console.WriteLine("thank you ! Exit System");
                         }
-
-                        break;
-
-
-                        case 11:
-                        Console.WriteLine("Thank you for using the libarary System, press any key");
-
-                        exit = true;
-                        break;
-
-                        if (exit == true)
+                        else
                         {
-                            Console.ReadLine();
-                            Console.Clear();
+                            Console.WriteLine("continue Program");
                         }
                         break;
+
+                    default:
+                        Console.WriteLine("invalid option try again");
 
                         
-                 
 
-
-
-                break;
-
-
-
-
-
-
-
+                      
                         break;
 
                 }
