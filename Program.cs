@@ -296,7 +296,6 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         Console.WriteLine("Enter the patient Id or name : ");
                         string key=Console.ReadLine();
                         bool AvailableP=false;
-
                         for(int i=0; i <= lastPatientIndex; i++)
                         {
                             if (key == patientIDs[i]|| key == patientNames[i])
@@ -330,17 +329,20 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                         case 5:
                         //List All Admitted Patients
+                        int PatientCount = 0;
                         bool PatientList=false;
                         for(int i=0; i<=lastPatientIndex;i++)
                         {
                             if (admitted[i] ==true)
                             {
                                 PatientList=true;
+                                PatientCount++;
                                 Console.WriteLine("patient Name:" + patientNames[i]);
                                 Console.WriteLine("Patient ID :" + patientIDs[i]);
                                 Console.WriteLine("diagnose: "   + diagnoses[i]);
                                 Console.WriteLine("department: " + departments[i]);
                                 Console.WriteLine("assigned doctor :" + assignedDoctors[i]);
+                                Console.WriteLine("total admitted count :  " + PatientCount);
 
                             }
                         }
