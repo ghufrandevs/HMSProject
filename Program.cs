@@ -22,54 +22,58 @@ namespace ConsoleApp1ManagingHealthcareClinic
             bool[] hasAppointment = new bool[100]; // true = appointment booked
 
 
-            int lastPatientIndex = -1;
+            int lastPatientIndex = 0;
 
             //seed data
             //Patient 1
-            patientNames[0] = "Ali Hassan";
-            patientIDs[0] = "P001";
-            diagnoses[0] = "Flu";
-            admitted[0] = false;
-            assignedDoctors[0] = "";
-            departments[0] = "General";
-            visitCount[0] = 2;
-            billingAmount[0] = 0;
-            appointmentDates[0] = "";
-            appointmentDoctors[0] = "";
-            appointmentDepts[0] = "";
-            hasAppointment[0]= false;
+
+            patientNames[lastPatientIndex] = "Ali Hassan";
+            patientIDs[lastPatientIndex] = "P001";
+            diagnoses[lastPatientIndex] = "Flu";
+            admitted[lastPatientIndex] = false;
+            assignedDoctors[lastPatientIndex] = "";
+            departments[lastPatientIndex] = "General";
+            visitCount[lastPatientIndex] = 2;
+            billingAmount[lastPatientIndex] = 0;
+            appointmentDates[lastPatientIndex] = "";
+            appointmentDoctors[lastPatientIndex] = "";
+            appointmentDepts[lastPatientIndex] = "";
+            hasAppointment[lastPatientIndex]= false;
             lastPatientIndex++;
+
 
             //Patient 2
-            patientNames[1] = "Sara Ahmed";
-            patientIDs[1] = "P002";
-            diagnoses[1] = "Fracture";
-            admitted[1] = true;
-            assignedDoctors[1] = "Dr. Noor";
-            departments[1] = "Orthopedics";
-            visitCount[1] = 4;
-            billingAmount[1] = 0;
-            appointmentDates[1] = "2025-09-1";
-            appointmentDoctors[1] = "";
-            appointmentDepts[1] = "";
-            hasAppointment[1] = false;
 
+            patientNames[lastPatientIndex] = "Sara Ahmed";
+            patientIDs[lastPatientIndex] = "P002";
+            diagnoses[lastPatientIndex] = "Fracture";
+            admitted[lastPatientIndex] = true;
+            assignedDoctors[lastPatientIndex] = "Dr. Noor";
+            departments[lastPatientIndex] = "Orthopedics";
+            visitCount[lastPatientIndex] = 4;
+            billingAmount[lastPatientIndex] = 0;
+            appointmentDates[lastPatientIndex] = "2025-09-1";
+            appointmentDoctors[lastPatientIndex] = "";
+            appointmentDepts[lastPatientIndex] = "";
+            hasAppointment[lastPatientIndex] = false;
             lastPatientIndex++;
+
 
 
             //Patient 3
-            patientNames[2] = "Omar Khalid";
-            patientIDs[2] = "P003";
-            diagnoses[2] = "Diabetes";
-            admitted[2] = false;
-            assignedDoctors[2] = "";
-            departments[2] = "Cardiology";
-            visitCount[2] = 1;
-            billingAmount[2] = 0;
-            appointmentDates[2] = "";
-            appointmentDoctors[2] = "";
-            appointmentDepts[2] = "";
-            hasAppointment[2] = false;
+
+            patientNames[lastPatientIndex] = "Omar Khalid";
+            patientIDs[lastPatientIndex] = "P003";
+            diagnoses[lastPatientIndex] = "Diabetes";
+            admitted[lastPatientIndex] = false;
+            assignedDoctors[lastPatientIndex] = "";
+            departments[lastPatientIndex] = "Cardiology";
+            visitCount[lastPatientIndex] = 1;
+            billingAmount[lastPatientIndex] = 0;
+            appointmentDates[lastPatientIndex] = "";
+            appointmentDoctors[lastPatientIndex] = "";
+            appointmentDepts[lastPatientIndex] = "";
+            hasAppointment[lastPatientIndex] = false;
             lastPatientIndex++;
 
 
@@ -92,9 +96,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                 try
                 {
-                    option = int.Parse(Console.ReadLine());
                     Console.WriteLine("please choice option");
-
+                    option = int.Parse(Console.ReadLine());
 
                 }
 
@@ -104,26 +107,24 @@ namespace ConsoleApp1ManagingHealthcareClinic
                     Console.WriteLine(ex.Message);
                 }
 
-
-
                     switch (option)
                 {
                     case 1:
                         //input and process
                         Console.WriteLine("Enter patient Name :");
-                        patientNames[lastPatientIndex + 1] = Console.ReadLine();
+                        patientNames[lastPatientIndex] = Console.ReadLine();
                         Console.WriteLine("Enter  diagnosis :");
-                        diagnoses[lastPatientIndex + 1] = Console.ReadLine();
+                        diagnoses[lastPatientIndex ] = Console.ReadLine();
                         Console.WriteLine("Enter department");
-                        departments[lastPatientIndex + 1] = Console.ReadLine();
-                        patientIDs[lastPatientIndex + 1]="P00"+(lastPatientIndex+2);
-                        admitted[lastPatientIndex+1] = false;
-                        assignedDoctors[lastPatientIndex + 1] = "";
-                        visitCount[lastPatientIndex+1]=0;
-                        billingAmount[lastPatientIndex+1]=0;
+                        departments[lastPatientIndex ] = Console.ReadLine();
+                        patientIDs[lastPatientIndex]="P"+(lastPatientIndex+1).ToString("D3"); 
+                        admitted[lastPatientIndex] = false;
+                        assignedDoctors[lastPatientIndex] = "";
+                        visitCount[lastPatientIndex]=0;
+                        billingAmount[lastPatientIndex]=0;
                         //output
                         Console.WriteLine("Patient registered successfully!");
-                        Console.WriteLine("Patient ID is : " + patientIDs[lastPatientIndex + 1]) ;
+                        Console.WriteLine("Patient ID is : " + patientIDs[lastPatientIndex]) ;
                         lastPatientIndex++;
                         break;
 
