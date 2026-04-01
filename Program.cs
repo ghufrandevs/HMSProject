@@ -368,7 +368,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         {
                             if (CurrentDoctor == NewDoctor)
                             {
-                                Console.WriteLine(" the names must be different");
+                                Console.WriteLine(" the doctor names must be different");
                             }
 
                             if (CurrentDoctor == assignedDoctors[i]&& admitted[i]==true)
@@ -420,7 +420,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         bool PatientAvailable=false;
                         for(int i = 0;i<=lastPatientIndex;i++)
                         {
-                            if (SearchDep == departments[i])
+                            if (departments[i] != null && departments[i].ToLower().Contains(SearchDep))
+                            //// Check if department is not null to avoid runtime error, then perform case-insensitive partial match
                             {
                                 PatientAvailable = true;
                                 Console.WriteLine("patient Name:" + patientNames[i]);
@@ -492,8 +493,16 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 {
                                     if (patientIDs[i] == patientID)
                                     {
-                                        Console.WriteLine("total: ");
-                                        Console.WriteLine( totalAmount += billingAmount[i]);
+                                        if(billingAmount[i] == 0)
+                                        {
+                                            Console.WriteLine("no billing records");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("total: ");
+                                            Console.WriteLine(totalAmount += billingAmount[i]);
+                                        }
+                                        
                                     }
 
 
