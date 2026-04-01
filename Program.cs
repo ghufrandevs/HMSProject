@@ -366,12 +366,21 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         bool CurrentDo=false;
                         for(int i=0;i<=lastPatientIndex;i++)
                         {
-                            if (CurrentDoctor == assignedDoctors[i]&& admitted[i]==true)
+                            if (CurrentDoctor == NewDoctor)
                             {
+                                Console.WriteLine(" the names must be different");
+                            }
+
+                            if (CurrentDoctor == assignedDoctors[i]&& admitted[i]==true)
+                                
+
+                            {
+                                
                                 assignedDoctors[i] = NewDoctor;
                                 CurrentDoctorindex = i;
                                 CurrentDo=true;
                                 Console.WriteLine("Patient " +patientNames[i] + " has been transferred to " + NewDoctor);
+                                break;
                             }
                         }
 
@@ -380,7 +389,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                             Console.WriteLine("No admitted patient found under this doctor");
                         }
                         
-                            break;
+                      break;
 
 
 
