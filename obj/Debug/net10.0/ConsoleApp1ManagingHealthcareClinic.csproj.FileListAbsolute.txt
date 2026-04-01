@@ -1,0 +1,15 @@
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\bin\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.exe
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\bin\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.deps.json
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\bin\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.runtimeconfig.json
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\bin\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.dll
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\bin\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.pdb
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.AssemblyInfoInputs.cache
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.AssemblyInfo.cs
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.csproj.CoreCompileInputs.cache
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.dll
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\refint\ConsoleApp1ManagingHealthcareClinic.dll
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.pdb
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.genruntimeconfig.cache
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ref\ConsoleApp1ManagingHealthcareClinic.dll
+C:\Users\ghufran.sa\Documents\training\managing healthcare clinic\ConsoleApp1ManagingHealthcareClinic\obj\Debug\net10.0\ConsoleApp1ManagingHealthcareClinic.sourcelink.json
