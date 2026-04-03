@@ -15,11 +15,17 @@ namespace ConsoleApp1ManagingHealthcareClinic
             string[] departments = new string[100];     // e.g. "Cardiology", "Orthopedics"
             int[] visitCount = new int[100];        // how many times admitted
             double[] billingAmount = new double[100];     // total fees owed
+            string[] lastVisitDate = new string[100]; //Stores the date the patient was last admitted
+            string[] lastDischargeDate= new string[100];
+            int[] daysInHospital= new int [100];
+            string[] bloodType= new string[100];
+
+
             //New
-            string[] appointmentDates = new string[100]; // e.g. "2025-09-15"
-            string[] appointmentDoctors = new string[100]; // doctor for the appointment
-            string[] appointmentDepts = new string[100]; // department for the appointment
-            bool[] hasAppointment = new bool[100]; // true = appointment booked
+            //string[] appointmentDates = new string[100]; // e.g. "2025-09-15"
+            //string[] appointmentDoctors = new string[100]; // doctor for the appointment
+            //string[] appointmentDepts = new string[100]; // department for the appointment
+            // bool[] hasAppointment = new bool[100]; // true = appointment booked
 
 
             int lastPatientIndex = 0;
@@ -35,10 +41,14 @@ namespace ConsoleApp1ManagingHealthcareClinic
             departments[lastPatientIndex] = "General";
             visitCount[lastPatientIndex] = 2;
             billingAmount[lastPatientIndex] = 0;
-            appointmentDates[lastPatientIndex] = "";
-            appointmentDoctors[lastPatientIndex] = "";
-            appointmentDepts[lastPatientIndex] = "";
-            hasAppointment[lastPatientIndex]= false;
+            lastVisitDate[lastPatientIndex] = "2025-01-10";
+            lastDischargeDate[lastPatientIndex] = "2025-01-15";
+            daysInHospital[lastPatientIndex] = 12;
+            bloodType[lastPatientIndex] = "A+";
+           // appointmentDates[lastPatientIndex] = "";
+            //appointmentDoctors[lastPatientIndex] = "";
+            //appointmentDepts[lastPatientIndex] = "";
+            //hasAppointment[lastPatientIndex]= false;
             lastPatientIndex++;
 
 
@@ -52,10 +62,14 @@ namespace ConsoleApp1ManagingHealthcareClinic
             departments[lastPatientIndex] = "Orthopedics";
             visitCount[lastPatientIndex] = 4;
             billingAmount[lastPatientIndex] = 0;
-            appointmentDates[lastPatientIndex] = "2025-09-1";
-            appointmentDoctors[lastPatientIndex] = "";
-            appointmentDepts[lastPatientIndex] = "";
-            hasAppointment[lastPatientIndex] = false;
+            lastVisitDate[lastPatientIndex] = "2025-03-02";
+            lastDischargeDate[lastPatientIndex] = "";
+            daysInHospital[lastPatientIndex] = 8;
+            bloodType[lastPatientIndex] = "O-";
+            //appointmentDates[lastPatientIndex] = "2025-09-1";
+            //appointmentDoctors[lastPatientIndex] = "";
+            // appointmentDepts[lastPatientIndex] = "";
+            // hasAppointment[lastPatientIndex] = false;
             lastPatientIndex++;
 
 
@@ -70,10 +84,14 @@ namespace ConsoleApp1ManagingHealthcareClinic
             departments[lastPatientIndex] = "Cardiology";
             visitCount[lastPatientIndex] = 1;
             billingAmount[lastPatientIndex] = 0;
-            appointmentDates[lastPatientIndex] = "";
-            appointmentDoctors[lastPatientIndex] = "";
-            appointmentDepts[lastPatientIndex] = "";
-            hasAppointment[lastPatientIndex] = false;
+            lastVisitDate[lastPatientIndex] = "2024-12-20";
+            lastDischargeDate[lastPatientIndex] = "2024-12-28";
+            daysInHospital[lastPatientIndex] = 5;
+            bloodType[lastPatientIndex] = "B+";
+            //appointmentDates[lastPatientIndex] = "";
+            //appointmentDoctors[lastPatientIndex] = "";
+            //appointmentDepts[lastPatientIndex] = "";
+            //hasAppointment[lastPatientIndex] = false;
             lastPatientIndex++;
 
 
@@ -117,11 +135,19 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         diagnoses[lastPatientIndex ] = Console.ReadLine();
                         Console.WriteLine("Enter department");
                         departments[lastPatientIndex ] = Console.ReadLine();
+                        Console.WriteLine("Enter blood type : ");
+                        bloodType[lastPatientIndex] = Console.ReadLine();
+
                         patientIDs[lastPatientIndex]="P"+(lastPatientIndex+1).ToString("D3"); 
                         admitted[lastPatientIndex] = false;
                         assignedDoctors[lastPatientIndex] = "";
                         visitCount[lastPatientIndex]=0;
                         billingAmount[lastPatientIndex]=0;
+                        //new
+                        lastVisitDate[lastPatientIndex] = "";
+                        lastDischargeDate[lastPatientIndex] = "";
+                        daysInHospital[lastPatientIndex] = 0;
+
                         //output
                         Console.WriteLine("Patient registered successfully!");
                         Console.WriteLine("Patient ID is : " + patientIDs[lastPatientIndex]) ;
@@ -143,6 +169,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                                 if (admitted[i] == true)
                                 {
+                                                                                                      
                                     Console.WriteLine("Patient is already admitted under " + assignedDoctors[i]);
                                     break;
                                 }
@@ -152,13 +179,19 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                     assignedDoctors[i] = Console.ReadLine();
                                     admitted[i] = true;
                                     visitCount[i]++;
+
+                                    //new
+                                    Console.WriteLine("Enter admission date (YYYY-MM-DD): ");
+                                    lastVisitDate[i] = Console.ReadLine();
+                                    lastDischargeDate[i] = "";
+                                    //
                                     if (visitCount[i] ==1)
                                     {
-                                        Console.WriteLine("Patient admitted for the first time and assigned with "+ assignedDoctors[i]);
+                                        Console.WriteLine("Patient admitted for the first time and assigned with "+ assignedDoctors[i] + " on " + lastVisitDate[i]);
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Patient admitted successfully and assigned to : " + assignedDoctors[i]);
+                                        Console.WriteLine("Patient admitted successfully and assigned to : " + assignedDoctors[i] + " on " + lastVisitDate[i]);
                                         Console.WriteLine("This patient has been admitted " + visitCount[i] + " times");
                                     }
                                        
@@ -532,7 +565,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                             exit = true;
                             Console.WriteLine("thank you ! Exit System");
                         }
-                        else
+                        else if(input=="no")
                         {
                             Console.WriteLine("continue Program");
                         }
