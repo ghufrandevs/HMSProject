@@ -1,5 +1,7 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.Metrics;
+using System.Numerics;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ConsoleApp1ManagingHealthcareClinic
 {
@@ -214,7 +216,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         //Discharge Patient
                         Console.WriteLine("Enter Patient ID or name :");
                         string DkeyPatient = Console.ReadLine();
-
+                        int days = 0;
                         double TotalCharge = 0;
                         bool DcPaSearch = false;
                         for (int i = 0; i <= lastPatientIndex; i++)
@@ -240,12 +242,16 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                             try
                                             {
                                                 amount = double.Parse(Console.ReadLine());
-                                                validA = true;
-                                                if(amount <= 0)
+                                                if(amount > 0)
+                                                {
+                                                    validA = true;
+
+                                                }
+                                                else
                                                 {
                                                     Console.WriteLine(" the amount is invalid ! ");
-                                                }
 
+                                                }
                                             }
                                             catch (Exception ex)
                                             {
@@ -273,10 +279,16 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                             try
                                             {
                                                 medicalCharge = double.Parse(Console.ReadLine());
-                                                valid = true; //out from loop
-                                                if(medicalCharge <= 0)
+                                                
+
+                                                if(medicalCharge > 0)
+                                                {
+                                                    valid = true; //out from loop
+                                                }
+                                                else
                                                 {
                                                     Console.WriteLine("the amount is invalid !");
+
                                                 }
                                             }
                                             catch
@@ -291,6 +303,13 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                     billingAmount[i] += TotalCharge;
                                     admitted[i] = false;
                                     assignedDoctors[i] = "";
+                                    //new part3
+                                    Console.WriteLine(" Enter the discharge date (YYYY-MM-DD) : ");
+                                    lastDischargeDate[i] = Console.ReadLine();
+                                    Console.WriteLine("enter the number of days the patient spent in hospital during this visit");
+                                    days=int.Parse(Console.ReadLine());
+                                    daysInHospital[i] += days;
+                                    //
                                     if (TotalCharge > 0)
                                     {
                                         Console.WriteLine("Total charges added this visit : " + TotalCharge + " OMR");
@@ -301,7 +320,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                         Console.WriteLine("No charges recorded");
                                         
                                     }
-                                    Console.WriteLine("Patient discharged successfully");
+                                    Console.WriteLine("Patient discharged successfully on " + lastDischargeDate[i]);
+                                    Console.WriteLine("Total days in hospital: " + daysInHospital[i]);
                                     break;
                                 
 
@@ -339,17 +359,42 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 Console.WriteLine("Patient ID :" + patientIDs[i]);
                                 Console.WriteLine("diagnose: " + diagnoses[i]);
                                 Console.WriteLine("department: " + departments[i]);
+                                //new
+                                Console.WriteLine(" blood Type: " +bloodType[i]);
+                                //
                                 Console.WriteLine(" admission status: " + admitted[i]);
                                 Console.WriteLine(" visit count: " +visitCount[i]);
                                 Console.WriteLine(" total billing amount: " + billingAmount[i]);
+                                
+
                                 if (admitted[i] == true)
                                 {
-                                    Console.WriteLine("assigned doctor :" +assignedDoctors[i]);
+                                    Console.WriteLine("assigned doctor :" + assignedDoctors[i]);
                                 }
                                 else
                                 {
                                     Console.WriteLine("This patient is not currently admitted");
                                 }
+                                //new
+                                if (lastVisitDate[i] == "")
+                                {
+                                    Console.WriteLine("No admission recorded ");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("last visit date: " + lastVisitDate[i]);
+                                }
+                                if (lastDischargeDate[i] =="")
+                                {
+                                    Console.WriteLine(" Patient Still admitted");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("last discharge date: " + lastDischargeDate[i]);
+                                }
+                                
+                                    Console.WriteLine("Total Days in Hospital:" + daysInHospital[i]);
+                                ///////
                                 break;
                             }
                         }
