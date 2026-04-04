@@ -420,6 +420,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 Console.WriteLine("diagnose: "   + diagnoses[i]);
                                 Console.WriteLine("department: " + departments[i]);
                                 Console.WriteLine("assigned doctor :" + assignedDoctors[i]);
+                                //new
+                                Console.WriteLine("last visit date: " + lastVisitDate[i]);
                                 Console.WriteLine("total admitted count :  " + PatientCount);
 
                             }
@@ -439,25 +441,24 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         string CurrentDoctor=Console.ReadLine();
                         Console.WriteLine("Enter New Doctor Name : ");
                         string NewDoctor=Console.ReadLine();
-
-                        int CurrentDoctorindex = 0;
-                        bool CurrentDo=false;
-                        for(int i=0;i<=lastPatientIndex;i++)
+                        if (CurrentDoctor == NewDoctor)
                         {
-                            if (CurrentDoctor == NewDoctor)
-                            {
-                                Console.WriteLine(" the doctor names must be different");
-                            }
-
-                            if (CurrentDoctor == assignedDoctors[i]&& admitted[i]==true)
+                            Console.WriteLine(" the doctor names must be different");
+                            break;
+                        }
+                        bool CurrentDo=false;                
+                        for (int i=0;i<=lastPatientIndex;i++)
+                        {
+                            
+                            if (CurrentDoctor == assignedDoctors[i] && admitted[i]==true)
                                 
-
                             {
                                 
                                 assignedDoctors[i] = NewDoctor;
-                                CurrentDoctorindex = i;
                                 CurrentDo=true;
                                 Console.WriteLine("Patient " +patientNames[i] + " has been transferred to " + NewDoctor);
+                                //new
+                                Console.WriteLine("Patient last admitted on " +lastVisitDate[i]);
                                 break;
                             }
                         }
