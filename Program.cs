@@ -506,6 +506,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 Console.WriteLine("patient Name:" + patientNames[i]);
                                 Console.WriteLine("Patient ID :" + patientIDs[i]);
                                 Console.WriteLine("diagnose: " + diagnoses[i]);
+                                //new
+                                Console.WriteLine("blood type: " +bloodType[i]);
 
 
                                 if (admitted[i] == true)
@@ -549,6 +551,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         {
                             Console.WriteLine("Invalid input. Please enter 1 or 2 ");
                             Console.WriteLine(ex.Message);
+                            continue;
                         }
 
                         switch (options)
@@ -567,34 +570,40 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 case 2:
                                 Console.WriteLine("Enter patient ID :");
                                 string patientID = Console.ReadLine();
-
+                                bool found=false;
                                 for (int i = 0; i <= lastPatientIndex; i++)
                                 {
                                     if (patientIDs[i] == patientID)
                                     {
-                                        if(billingAmount[i] == 0)
+                                        found = true;
+
+                                        if (billingAmount[i] == 0)
                                         {
                                             Console.WriteLine("no billing records");
                                         }
                                         else
                                         {
-                                            Console.WriteLine("total: ");
-                                            Console.WriteLine(totalAmount += billingAmount[i]);
+                                            Console.WriteLine("Total: " + billingAmount[i] + " OMR");
+                                            Console.WriteLine("Last Visit Date: " + lastVisitDate[i]);
+                                            Console.WriteLine("Total Days: " + daysInHospital[i]);
                                         }
-                                        
+                                        break;
                                     }
 
 
                                 }
-
-
+                                if (found==false)
+                                {
+                                    Console.WriteLine("Patient not found");
+                                }
 
                                 break;
 
-                        }
+                            default:
+                                Console.WriteLine("Invalid option");
+                                break;                            
 
-
-                         
+                        }                       
 
                         break;
 
