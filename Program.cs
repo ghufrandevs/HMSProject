@@ -378,10 +378,14 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         case 5:
                         //List All Admitted Patients
                         int PatientCount = 0;
-                        bool PatientList=false;
-                        for(int i=0; i<=lastPatientIndex;i++)
+                        Console.WriteLine("Filter by name keyword (press Enter to skip): ");
+                        string keyword = Console.ReadLine().ToLower();
+                        double maxBilling = 0;
+                        bool PatientList = false;
+
+                        for (int i=0; i<=lastPatientIndex;i++)
                         {
-                            if (admitted[i] ==true)
+                            if (admitted[i] == true && (keyword == "" || patientNames[i].ToLower().Contains(keyword)))
                             {
                                 PatientList=true;
                                 PatientCount++;
@@ -389,28 +393,41 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 Console.WriteLine("Patient ID :" + patientIDs[i]);
                                 Console.WriteLine("diagnose: "   + diagnoses[i]);
                                 Console.WriteLine("department: " + departments[i]);
+                                Console.WriteLine("Billing: " + Math.Round(billingAmount[i], 2) + " OMR");
+
                                 Console.WriteLine("assigned doctor :" + assignedDoctors[i]);
                                 //new
                                 Console.WriteLine("Last Visit Date: " + lastVisitDate[i].ToString("yyyy-MM-dd"));
-                                Console.WriteLine("total admitted count :  " + PatientCount);
+                                maxBilling = Math.Max(maxBilling, billingAmount[i]);
+
 
                             }
                         }
-                        break;
-                        if(PatientList==false)
+                        if (PatientList==false)
                         {
                             Console.WriteLine("No patients currently admitted");
                         }
+                        else
+                        {
+                            Console.WriteLine("total admitted count :  " + PatientCount);
 
+                            Console.WriteLine("Highest billing among admitted patients: " + Math.Round(maxBilling, 2) + " OMR");
+
+                        }
 
                         break;
 
                         case 6:
                         //Transfer Patient to Another Doctor
                         Console.WriteLine("Enter Current Doctor Name :");
-                        string CurrentDoctor=Console.ReadLine();
+                        string CurrentDoctor=Console.ReadLine().Trim();
                         Console.WriteLine("Enter New Doctor Name : ");
-                        string NewDoctor=Console.ReadLine();
+                        string NewDoctor=Console.ReadLine().Trim();
+                        //new
+                        // Normalize format
+                        CurrentDoctor = CurrentDoctor.Replace("Dr ", "Dr. ");
+                        NewDoctor = NewDoctor.Replace("Dr ", "Dr. ");
+
                         if (CurrentDoctor == NewDoctor)
                         {
                             Console.WriteLine(" the doctor names must be different");
