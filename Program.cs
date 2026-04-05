@@ -483,7 +483,12 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         Console.WriteLine("Enter the Department : ");
                         string SearchDep=Console.ReadLine().ToLower();
 
-                        bool PatientAvailable=false;
+                        //  NEW (header uppercase)
+                        Console.WriteLine("Patients in department '" + SearchDep.ToUpper() + "':");
+                        //new
+                        string displayDiagnosis;
+
+                        bool PatientAvailable =false;
                         for(int i = 0;i<=lastPatientIndex;i++)
                         {
                             if (departments[i] != null && departments[i].ToLower().Contains(SearchDep))
@@ -492,8 +497,18 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 PatientAvailable = true;
                                 Console.WriteLine("patient Name:" + patientNames[i]);
                                 Console.WriteLine("Patient ID :" + patientIDs[i]);
-                                Console.WriteLine("diagnose: " + diagnoses[i]);
-                                //new
+
+                                // new (truncate diagnosis)
+                                if (diagnoses[i].Length > 15)
+                                {
+                                    displayDiagnosis = diagnoses[i].Substring(0, 15) + "...";
+                                }
+                                else
+                                {
+                                    displayDiagnosis = diagnoses[i];
+                                }
+
+                                Console.WriteLine("Diagnosis: " + displayDiagnosis);
                                 Console.WriteLine("blood type: " +bloodType[i]);
 
 
@@ -521,17 +536,17 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
 
                         case 9:
-                        //Billing Report
+                        // Billing Report
+
                         Console.WriteLine("please choice options :");
                         Console.WriteLine("1.System-wide total");
                         Console.WriteLine("2.Individual patient");
-                        int options = 0;
 
+                        int options = 0;
                         double totalAmount = 0;
 
                         try
                         {
-
                             options = int.Parse(Console.ReadLine());
                         }
                         catch (Exception ex)
@@ -544,25 +559,53 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         switch (options)
                         {
                             case 1:
-                                for(int i = 0;i<=lastPatientIndex;i++)
-                                {
-                                    totalAmount += billingAmount[i];
 
-                                
+                                double max = 0;
+                                double min = 0;
+                                bool found = false;
+
+                                for (int i = 0; i <= lastPatientIndex; i++)
+                                {
+                                    if (billingAmount[i] > 0)
+                                    {
+                                        totalAmount += billingAmount[i];
+
+                                        if (found==false)
+                                        {
+                                            max = billingAmount[i];
+                                            min = billingAmount[i];
+                                            found = true;
+                                        }
+                                        else
+                                        {
+                                            max = Math.Max(max, billingAmount[i]);
+                                            min = Math.Min(min, billingAmount[i]);
+                                        }
+                                    }
                                 }
-                                Console.WriteLine("total amount : " + totalAmount);
+
+                                Console.WriteLine("total amount : " + Math.Round(totalAmount, 2) + " OMR");
+
+                                if (found==true)
+                                {
+                                    Console.WriteLine("Highest individual billing: " + Math.Round(max, 2) + " OMR");
+                                    Console.WriteLine("Lowest individual billing: " + Math.Round(min, 2) + " OMR");
+                                }
+
                                 break;
 
 
-                                case 2:
+                            case 2:
+
                                 Console.WriteLine("Enter patient ID :");
                                 string patientID = Console.ReadLine();
-                                bool found=false;
+                                bool foundPatient = false;
+
                                 for (int i = 0; i <= lastPatientIndex; i++)
                                 {
                                     if (patientIDs[i] == patientID)
                                     {
-                                        found = true;
+                                        foundPatient = true;
 
                                         if (billingAmount[i] == 0)
                                         {
@@ -570,35 +613,42 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                         }
                                         else
                                         {
-                                            Console.WriteLine("Total: " + billingAmount[i] + " OMR");
+                                            Console.WriteLine("Total: " + Math.Round(billingAmount[i], 2) + " OMR");
                                             Console.WriteLine("Last Visit Date: " + lastVisitDate[i].ToString("yyyy-MM-dd"));
                                             Console.WriteLine("Total Days: " + daysInHospital[i]);
+
+                                            // Random discount
+                                            Random rand = new Random();
+                                            int discount = rand.Next(5, 21);
+
+                                            double discounted = billingAmount[i] - (billingAmount[i] * discount / 100);
+
+                                            Console.WriteLine("Discount applied: " + discount + "% — Amount after discount: " + Math.Round(discounted, 2) + " OMR");
                                         }
+
                                         break;
                                     }
-
-
                                 }
-                                if (found==false)
+
+                                if (foundPatient == false)
                                 {
                                     Console.WriteLine("Patient not found");
                                 }
 
                                 break;
 
+
                             default:
                                 Console.WriteLine("Invalid option");
-                                break;                            
-
-                        }                       
+                                break;
+                        }
 
                         break;
 
 
-                   
 
 
-                        case 10:
+                    case 10:
 
                         Console.WriteLine("Thank you for using the Managing health care System,are sure to want to exit (Yes/No)");
                         string input = Console.ReadLine().ToLower();
