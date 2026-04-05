@@ -17,8 +17,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
             string[] departments = new string[100];     // e.g. "Cardiology", "Orthopedics"
             int[] visitCount = new int[100];        // how many times admitted
             double[] billingAmount = new double[100];     // total fees owed
-            string[] lastVisitDate = new string[100]; //Stores the date the patient was last admitted
-            string[] lastDischargeDate= new string[100];
+            DateTime[] lastVisitDate = new DateTime[100]; //Stores the date the patient was last admitted
+            DateTime[] lastDischargeDate= new DateTime[100];
             int[] daysInHospital= new int [100];
             string[] bloodType= new string[100];
 
@@ -43,8 +43,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
             departments[lastPatientIndex] = "General";
             visitCount[lastPatientIndex] = 2;
             billingAmount[lastPatientIndex] = 0;
-            lastVisitDate[lastPatientIndex] = "2025-01-10";
-            lastDischargeDate[lastPatientIndex] = "2025-01-15";
+            lastVisitDate[lastPatientIndex] = new DateTime(2025, 1, 10);
+            lastDischargeDate[lastPatientIndex] = new DateTime(2025, 1, 15);
             daysInHospital[lastPatientIndex] = 12;
             bloodType[lastPatientIndex] = "A+";
            // appointmentDates[lastPatientIndex] = "";
@@ -64,8 +64,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
             departments[lastPatientIndex] = "Orthopedics";
             visitCount[lastPatientIndex] = 4;
             billingAmount[lastPatientIndex] = 0;
-            lastVisitDate[lastPatientIndex] = "2025-03-02";
-            lastDischargeDate[lastPatientIndex] = "";
+            lastVisitDate[lastPatientIndex] = new DateTime(2025, 3, 15);
+            lastDischargeDate[lastPatientIndex] = DateTime.MinValue;
             daysInHospital[lastPatientIndex] = 8;
             bloodType[lastPatientIndex] = "O-";
             //appointmentDates[lastPatientIndex] = "2025-09-1";
@@ -86,8 +86,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
             departments[lastPatientIndex] = "Cardiology";
             visitCount[lastPatientIndex] = 1;
             billingAmount[lastPatientIndex] = 0;
-            lastVisitDate[lastPatientIndex] = "2024-12-20";
-            lastDischargeDate[lastPatientIndex] = "2024-12-28";
+            lastVisitDate[lastPatientIndex] = new DateTime(2025, 9, 1);
+            lastDischargeDate[lastPatientIndex] = new DateTime(2025, 8, 8);
             daysInHospital[lastPatientIndex] = 5;
             bloodType[lastPatientIndex] = "B+";
             //appointmentDates[lastPatientIndex] = "";
@@ -146,8 +146,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         visitCount[lastPatientIndex]=0;
                         billingAmount[lastPatientIndex]=0;
                         //new
-                        lastVisitDate[lastPatientIndex] = "";
-                        lastDischargeDate[lastPatientIndex] = "";
+                        lastVisitDate[lastPatientIndex] = DateTime.MinValue;
+                        lastDischargeDate[lastPatientIndex] = DateTime.MinValue;
                         daysInHospital[lastPatientIndex] = 0;
 
                         //output
@@ -184,8 +184,17 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                                     //new
                                     Console.WriteLine("Enter admission date (YYYY-MM-DD): ");
-                                    lastVisitDate[i] = Console.ReadLine();
-                                    lastDischargeDate[i] = "";
+                                    try
+                                    {
+                                        lastVisitDate[i] = DateTime.Parse(Console.ReadLine()).Date;
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("Invalid date! Setting default value.");
+                                        lastVisitDate[i] = DateTime.MinValue;
+                                    }
+
+                                    lastDischargeDate[i] = DateTime.MinValue;
                                     //
                                     if (visitCount[i] ==1)
                                     {
@@ -304,8 +313,17 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                     admitted[i] = false;
                                     assignedDoctors[i] = "";
                                     //new part3
-                                    Console.WriteLine(" Enter the discharge date (YYYY-MM-DD) : ");
-                                    lastDischargeDate[i] = Console.ReadLine();
+                                    Console.WriteLine("Enter discharge date (YYYY-MM-DD):");
+
+                                    try
+                                    {
+                                        lastDischargeDate[i] = DateTime.Parse(Console.ReadLine()).Date;
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("Invalid date! Setting default value.");
+                                        lastDischargeDate[i] = DateTime.MinValue;
+                                    }
                                     Console.WriteLine("enter the number of days the patient spent in hospital during this visit");
                                     days=int.Parse(Console.ReadLine());
                                     daysInHospital[i] += days;
@@ -376,21 +394,21 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                     Console.WriteLine("This patient is not currently admitted");
                                 }
                                 //new
-                                if (lastVisitDate[i] == "")
+                                if (lastVisitDate[i] == DateTime.MinValue)
                                 {
                                     Console.WriteLine("No admission recorded ");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("last visit date: " + lastVisitDate[i]);
+                                    Console.WriteLine("Last Visit Date: " + lastVisitDate[i].ToString("yyyy-MM-dd"));
                                 }
-                                if (lastDischargeDate[i] =="")
+                                if (lastDischargeDate[i] == DateTime.MinValue)
                                 {
                                     Console.WriteLine(" Patient Still admitted");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("last discharge date: " + lastDischargeDate[i]);
+                                    Console.WriteLine("Last Discharge Date: " + lastDischargeDate[i].ToString("yyyy-MM-dd"));
                                 }
                                 
                                     Console.WriteLine("Total Days in Hospital:" + daysInHospital[i]);
@@ -421,7 +439,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 Console.WriteLine("department: " + departments[i]);
                                 Console.WriteLine("assigned doctor :" + assignedDoctors[i]);
                                 //new
-                                Console.WriteLine("last visit date: " + lastVisitDate[i]);
+                                Console.WriteLine("Last Visit Date: " + lastVisitDate[i].ToString("yyyy-MM-dd"));
                                 Console.WriteLine("total admitted count :  " + PatientCount);
 
                             }
@@ -458,7 +476,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 CurrentDo=true;
                                 Console.WriteLine("Patient " +patientNames[i] + " has been transferred to " + NewDoctor);
                                 //new
-                                Console.WriteLine("Patient last admitted on " +lastVisitDate[i]);
+                                Console.WriteLine("Patient last admitted on " + lastVisitDate[i].ToString("yyyy-MM-dd"));
                                 break;
                             }
                         }
@@ -584,7 +602,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                         else
                                         {
                                             Console.WriteLine("Total: " + billingAmount[i] + " OMR");
-                                            Console.WriteLine("Last Visit Date: " + lastVisitDate[i]);
+                                            Console.WriteLine("Last Visit Date: " + lastVisitDate[i].ToString("yyyy-MM-dd"));
                                             Console.WriteLine("Total Days: " + daysInHospital[i]);
                                         }
                                         break;
@@ -607,7 +625,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                         break;
 
-                        
+
+                   
 
 
                         case 10:
