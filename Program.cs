@@ -132,13 +132,13 @@ namespace ConsoleApp1ManagingHealthcareClinic
                     case 1:
                         //input and process
                         Console.WriteLine("Enter patient Name :");
-                        patientNames[lastPatientIndex] = Console.ReadLine();
+                        patientNames[lastPatientIndex] = Console.ReadLine().Trim();
                         Console.WriteLine("Enter  diagnosis :");
-                        diagnoses[lastPatientIndex ] = Console.ReadLine();
+                        diagnoses[lastPatientIndex ] = Console.ReadLine().Trim();
                         Console.WriteLine("Enter department");
-                        departments[lastPatientIndex ] = Console.ReadLine();
+                        departments[lastPatientIndex ] = Console.ReadLine().Trim();
                         Console.WriteLine("Enter blood type : ");
-                        bloodType[lastPatientIndex] = Console.ReadLine();
+                        bloodType[lastPatientIndex] = Console.ReadLine().ToUpper();
 
                         patientIDs[lastPatientIndex]="P"+(lastPatientIndex+1).ToString("D3"); 
                         admitted[lastPatientIndex] = false;
@@ -183,26 +183,17 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                     visitCount[i]++;
 
                                     //new
-                                    Console.WriteLine("Enter admission date (YYYY-MM-DD): ");
-                                    try
-                                    {
-                                        lastVisitDate[i] = DateTime.Parse(Console.ReadLine()).Date;
-                                    }
-                                    catch
-                                    {
-                                        Console.WriteLine("Invalid date! Setting default value.");
-                                        lastVisitDate[i] = DateTime.MinValue;
-                                    }
+                                    lastVisitDate[i] = DateTime.Now;
 
                                     lastDischargeDate[i] = DateTime.MinValue;
                                     //
                                     if (visitCount[i] ==1)
                                     {
-                                        Console.WriteLine("Patient admitted for the first time and assigned with "+ assignedDoctors[i] + " on " + lastVisitDate[i]);
+                                        Console.WriteLine("Patient admitted for the first time and assigned with "+ assignedDoctors[i] + " on " + lastVisitDate[i].ToString("yyyy-MM-dd HH:mm"));
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Patient admitted successfully and assigned to : " + assignedDoctors[i] + " on " + lastVisitDate[i]);
+                                        Console.WriteLine("Patient admitted successfully and assigned to : " + assignedDoctors[i] + " on " + lastVisitDate[i].ToString("yyyy-MM-dd HH:mm"));
                                         Console.WriteLine("This patient has been admitted " + visitCount[i] + " times");
                                     }
                                        
@@ -222,147 +213,108 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
 
                         case 3:
-                        //Discharge Patient
+                    
+                        // Discharge Patient
+
                         Console.WriteLine("Enter Patient ID or name :");
                         string DkeyPatient = Console.ReadLine();
+
                         int days = 0;
                         double TotalCharge = 0;
                         bool DcPaSearch = false;
+
                         for (int i = 0; i <= lastPatientIndex; i++)
                         {
-                            if(DkeyPatient == patientNames[i] || DkeyPatient == patientIDs[i])
+                            if (DkeyPatient == patientNames[i] || DkeyPatient == patientIDs[i])
                             {
                                 DcPaSearch = true;
 
-                                if(admitted[i] == true)
+                                if (admitted[i] == true)
                                 {
+                                    // Consultation Fee
                                     Console.WriteLine("Was there a consultation fee? (yes/no) ");
                                     string consultation = Console.ReadLine().ToLower();
-                                    //ToLowe :Converts the string to lowercase to make input comparison case-insensitive
-                                    double amount = 0;
+
                                     if (consultation == "yes")
                                     {
-                                        
-                                        bool validA=false;
-                                        while (!validA)
+                                        Console.WriteLine("Enter the amount : ");
+
+                                        if (double.TryParse(Console.ReadLine(), out double amount) && amount > 0)
                                         {
-                                            Console.WriteLine("Enter the amount : ");
-
-                                            try
-                                            {
-                                                amount = double.Parse(Console.ReadLine());
-                                                if(amount > 0)
-                                                {
-                                                    validA = true;
-
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine(" the amount is invalid ! ");
-
-                                                }
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Console.WriteLine("Invalid input. Please choose a number ");
-                                                Console.WriteLine(ex.Message);
-                                            }
+                                            TotalCharge += amount;
                                         }
-                                        TotalCharge += amount;
-                                        
-                                        
+                                        else
+                                        {
+                                            Console.WriteLine("Invalid amount entered. No charge added.");
+                                        }
                                     }
 
+                                    // Medication Charges
                                     Console.WriteLine("Any medication charges? (yes/no)");
                                     string medicalChang = Console.ReadLine().ToLower();
 
-                                    if (medicalChang == "yes") {
+                                    if (medicalChang == "yes")
+                                    {
+                                        Console.WriteLine("Enter the charges : ");
 
-                                        double medicalCharge = 0;
-                                        bool valid = false;
-
-                                        while (!valid)
+                                        if (double.TryParse(Console.ReadLine(), out double medicalCharge) && medicalCharge > 0)
                                         {
-                                            Console.WriteLine("Enter the charges : ");
-
-                                            try
-                                            {
-                                                medicalCharge = double.Parse(Console.ReadLine());
-                                                
-
-                                                if(medicalCharge > 0)
-                                                {
-                                                    valid = true; //out from loop
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine("the amount is invalid !");
-
-                                                }
-                                            }
-                                            catch
-                                            {
-                                                Console.WriteLine("Invalid input! Please enter a valid number.");
-                                            }
+                                            TotalCharge += medicalCharge;
                                         }
-
-                                        TotalCharge += medicalCharge;
-
+                                        else
+                                        {
+                                            Console.WriteLine("Invalid amount entered. No charge added.");
+                                        }
                                     }
+
+                                    // Update billing
                                     billingAmount[i] += TotalCharge;
+
+                                    // Discharge
                                     admitted[i] = false;
                                     assignedDoctors[i] = "";
-                                    //new part3
-                                    Console.WriteLine("Enter discharge date (YYYY-MM-DD):");
 
-                                    try
-                                    {
-                                        lastDischargeDate[i] = DateTime.Parse(Console.ReadLine()).Date;
-                                    }
-                                    catch
-                                    {
-                                        Console.WriteLine("Invalid date! Setting default value.");
-                                        lastDischargeDate[i] = DateTime.MinValue;
-                                    }
-                                    Console.WriteLine("enter the number of days the patient spent in hospital during this visit");
-                                    days=int.Parse(Console.ReadLine());
+                                    // Record discharge time automatically
+                                    lastDischargeDate[i] = DateTime.Now;
+
+                                    // Calculate days
+                                    days = (lastDischargeDate[i] - lastVisitDate[i]).Days;
                                     daysInHospital[i] += days;
-                                    //
+
+                                    // Output
                                     if (TotalCharge > 0)
                                     {
-                                        Console.WriteLine("Total charges added this visit : " + TotalCharge + " OMR");
-
+                                        Console.WriteLine("Total charges added this visit : " + Math.Round(TotalCharge, 2) + " OMR");
+                                        Console.WriteLine("Total billing amount: " + Math.Round(billingAmount[i], 2) + " OMR");
                                     }
                                     else
                                     {
                                         Console.WriteLine("No charges recorded");
-                                        
                                     }
-                                    Console.WriteLine("Patient discharged successfully on " + lastDischargeDate[i]);
-                                    Console.WriteLine("Total days in hospital: " + daysInHospital[i]);
-                                    break;
-                                
 
-                            }
+                                    Console.WriteLine("Patient discharged successfully on " + lastDischargeDate[i].ToString("yyyy-MM-dd HH:mm"));
+                                    Console.WriteLine("Days in this visit: " + days);
+                                    Console.WriteLine("Total days in hospital: " + daysInHospital[i]);
+
+                                    break;
+                                }
                                 else
                                 {
                                     Console.WriteLine("This patient is not currently admitted");
                                     break;
-
                                 }
                             }
                         }
 
-                        if(DcPaSearch == false)
+                        if (DcPaSearch == false)
                         {
                             Console.WriteLine("the patient not found");
                         }
 
+                        break;
 
-                          break;
 
-
-                        case 4:
+                    case 4:
                         //search patient 
                         Console.WriteLine("Enter the patient Id or name : ");
                         string key=Console.ReadLine();
@@ -374,15 +326,15 @@ namespace ConsoleApp1ManagingHealthcareClinic
                                 AvailableP = true;
                                 Console.WriteLine("the patient details : ");
                                 Console.WriteLine("patient Name:  " + patientNames[i]);
-                                Console.WriteLine("Patient ID :" + patientIDs[i]);
-                                Console.WriteLine("diagnose: " + diagnoses[i]);
+                                Console.WriteLine("Patient ID :" + patientIDs[i].ToUpper());
+                                Console.WriteLine("Diagnosis: " + diagnoses[i] + " (" + diagnoses[i].Length + " characters)");
                                 Console.WriteLine("department: " + departments[i]);
                                 //new
                                 Console.WriteLine(" blood Type: " +bloodType[i]);
                                 //
                                 Console.WriteLine(" admission status: " + admitted[i]);
                                 Console.WriteLine(" visit count: " +visitCount[i]);
-                                Console.WriteLine(" total billing amount: " + billingAmount[i]);
+                                Console.WriteLine(" total billing amount: " +Convert.ToString(Math.Round( billingAmount[i],2)) +" OMR" );
                                 
 
                                 if (admitted[i] == true)
