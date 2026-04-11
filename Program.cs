@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Metrics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 using System.Numerics;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -58,6 +59,47 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("Doctor " + DoctorName + " registered successfully with " + slots + " available slots.");
             }
         }
+        static public void DoctorSalaryReport()
+        {
+            double Dsalary = 0;
+            double Maxsalary = 0;
+            int MaxIndex = -1;
+
+            if (lastDoctorIndex == -1)
+            {
+                Console.WriteLine("No doctor register in this system!");
+                return;
+            }
+
+            for (int i = 0; i <= lastDoctorIndex; i++)
+            {
+                Dsalary = (300 + (doctorVisitCount[i] * 15));
+                Dsalary = Math.Round(Dsalary, 2);
+                Console.WriteLine("Dr." + doctorNames[i] + "|| visit: " + doctorVisitCount[i] + "|| Available Slot: " + doctorAvailableSlots[i] + "|| salary: " + Dsalary);
+
+               
+                if (i == 0)
+                {
+                    Maxsalary = Dsalary;
+                    MaxIndex = 0;
+                }
+                else
+                {
+                    if (Dsalary > Maxsalary)
+                    {
+                        Maxsalary = Dsalary;
+                        MaxIndex = i;
+                    }
+                }
+            }
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Highest earning doctor: " +
+            doctorNames[MaxIndex] + " — " +
+            Math.Round(Maxsalary, 2) + " OMR");
+        }
+        
+
+        //
         static bool ExitSystem()
         {
             Console.WriteLine("Thank you for using the Managing Health Care System.");
@@ -185,8 +227,19 @@ namespace ConsoleApp1ManagingHealthcareClinic
             billingAmount[PatientSearch] += TotalCharge;
 
                 // Discharge
+                string doctor = assignedDoctors[PatientSearch];
                 admitted[PatientSearch] = false;
-                assignedDoctors[PatientSearch] = "";
+                int doctorIndex =SearchDoctor(doctor);
+                if( doctorIndex == -1)
+            {
+                Console.WriteLine("Warning: assigned doctor not found in registry. Slots not updated.");
+            }
+                else
+            {
+                doctorAvailableSlots[doctorIndex]++;
+                Console.WriteLine("doctor name:" + doctorNames[doctorIndex] + " now has " + doctorAvailableSlots[doctorIndex] + " slot(s) available.");
+            }
+            assignedDoctors[PatientSearch] = "";
 
                 // Record discharge time automatically
                 lastDischargeDate[PatientSearch] = DateTime.Now;
@@ -226,22 +279,45 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 }
                 else
                 {
-                    if (admitted[search] == true)
+                    if (admitted[search] == true )
                     {
                         Console.WriteLine("Patient is already admitted under " + assignedDoctors[search]);
                     }
                     else
                     {
+                    //
                         Console.WriteLine("Enter Doctor Name :");
-                        assignedDoctors[search] = Console.ReadLine();
+                        string DoctorInput = Console.ReadLine().Trim();
+                        int doctorIndex = -1;
+                        for(int i = 0;i<=lastDoctorIndex;i++)
+                    {
 
+                        if(DoctorInput.ToLower()==doctorNames[i].ToLower())
+                        {
+                            doctorIndex= i;
+                            break;
+                        }
+                    }
+                        if(doctorIndex==-1)
+                    {
+                        Console.WriteLine("Doctor not found in the system. Please register the doctor first.");
+                        return;
+                    }
+                    if (doctorAvailableSlots[doctorIndex]<=0)
+                    {
+                        Console.WriteLine("doctor name: " + doctorNames[doctorIndex] + " has no available slots at this time.");
+                        return;
+                    }
+                    assignedDoctors[search]=doctorNames[doctorIndex];
                         admitted[search] = true;
                         visitCount[search]++;
 
                         lastVisitDate[search] = DateTime.Now;
                         lastDischargeDate[search] = DateTime.MinValue;
+                        doctorAvailableSlots[doctorIndex]--;
+                        doctorVisitCount[doctorIndex]++;
 
-                        if (visitCount[search] == 1)
+                    if (visitCount[search] == 1)
                         {
                          Console.WriteLine("Patient admitted for the first time and assigned with "
                                 + assignedDoctors[search] + " on "
@@ -254,7 +330,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                          Console.WriteLine("This patient has been admitted "
                                 + visitCount[search] + " times");
                         }
-                    }
+                    Console.WriteLine("Doctor name: " + doctorNames[doctorIndex] + " now has "+ doctorAvailableSlots[doctorIndex] + " slot(s) remaining.");
+                }
                 }
             }
         static int Randomdiscount()
@@ -467,6 +544,21 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
             }
         }  
+        static public int SearchDoctor(string DoctorName)
+        {
+            DoctorName=DoctorName.Trim();
+            int found = -1;
+            for (int i = 0; i <= lastDoctorIndex; i++)
+            {
+                if (DoctorName == doctorNames[i] || DoctorName== doctorNames[i])
+                {
+                    found = i;
+                    break;
+                }
+            }
+            return found;
+        }     
+        
         static public int SearchPatient(string SearchInput)
         {
             int found = -1;
@@ -739,6 +831,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                             break;
                        
                     case 12:
+                        DoctorSalaryReport();
                         break;
                 } 
 
