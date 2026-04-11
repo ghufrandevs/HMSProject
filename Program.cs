@@ -20,12 +20,44 @@ namespace ConsoleApp1ManagingHealthcareClinic
         static int[] daysInHospital = new int[100];
         static string[] bloodType = new string[100];
         static int lastPatientIndex = -1;
+        //new
+        static string[] doctorNames= new string[50];
+        static int[] doctorAvailableSlots = new int[50];
+        static int[] doctorVisitCount = new int[50];
+        static int lastDoctorIndex = -1;
+        
 
-        //New
-        //string[] appointmentDates = new string[100]; // e.g. "2025-09-15"
-        //string[] appointmentDoctors = new string[100]; // doctor for the appointment
-        //string[] appointmentDepts = new string[100]; // department for the appointment
-        // bool[] hasAppointment = new bool[100]; // true = appointment booked
+        //new
+        static public void AddDoctor()
+        {
+            Console.WriteLine("Enter the Doctor name : ");
+            string DoctorName = Console.ReadLine().Trim();
+
+            for (int i = 0; i <= lastDoctorIndex; i++)
+            {
+                if (DoctorName.ToLower() == doctorNames[i].ToLower())
+                { 
+                    Console.WriteLine("Doctor already exists in the system");
+                    return;
+                }
+            }
+            Console.WriteLine("Enter Available slots : ");
+            if (!int.TryParse(Console.ReadLine(), out int slots) || slots < 1)
+            {
+                Console.WriteLine("Invalid slot count. Doctor not registered ");
+                return;
+
+            }
+
+            else
+            {
+                lastDoctorIndex++;
+                doctorNames[lastDoctorIndex] = DoctorName;
+                doctorAvailableSlots[lastDoctorIndex] = slots;
+                doctorVisitCount[lastDoctorIndex] = 0;
+                Console.WriteLine("Doctor " + DoctorName + " registered successfully with " + slots + " available slots.");
+            }
+        }
         static bool ExitSystem()
         {
             Console.WriteLine("Thank you for using the Managing Health Care System.");
@@ -478,8 +510,10 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("7.View Most Visited Patients ");
                 Console.WriteLine("8.Search Patients by Department ");
                 Console.WriteLine("9.Billing Report");
-                
                 Console.WriteLine("10.Exit");
+                Console.WriteLine("11. Add Doctor");
+                Console.WriteLine("12. Doctor Salary Report");
+
         }
         static public void seedData()
         {
@@ -498,10 +532,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             lastDischargeDate[lastPatientIndex] = new DateTime(2025, 1, 15);
             daysInHospital[lastPatientIndex] = 12;
             bloodType[lastPatientIndex] = "A+";
-            // appointmentDates[lastPatientIndex] = "";
-            //appointmentDoctors[lastPatientIndex] = "";
-            //appointmentDepts[lastPatientIndex] = "";
-            //hasAppointment[lastPatientIndex]= false;
+            
 
             //Patient 2
             lastPatientIndex++;
@@ -517,10 +548,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             lastDischargeDate[lastPatientIndex] = DateTime.MinValue;
             daysInHospital[lastPatientIndex] = 8;
             bloodType[lastPatientIndex] = "O-";
-            //appointmentDates[lastPatientIndex] = "2025-09-1";
-            //appointmentDoctors[lastPatientIndex] = "";
-            // appointmentDepts[lastPatientIndex] = "";
-            // hasAppointment[lastPatientIndex] = false;
+            
 
             //Patient 3
             lastPatientIndex++;
@@ -537,10 +565,24 @@ namespace ConsoleApp1ManagingHealthcareClinic
             lastDischargeDate[lastPatientIndex] = new DateTime(2025, 8, 8);
             daysInHospital[lastPatientIndex] = 5;
             bloodType[lastPatientIndex] = "B+";
-            //appointmentDates[lastPatientIndex] = "";
-            //appointmentDoctors[lastPatientIndex] = "";
-            //appointmentDepts[lastPatientIndex] = "";
-            //hasAppointment[lastPatientIndex] = false;
+            //new
+            //Doctor 1
+            lastDoctorIndex++;
+            doctorNames[lastDoctorIndex] = "Dr. Noor";
+            doctorAvailableSlots[lastDoctorIndex] = 5;
+            doctorVisitCount[lastDoctorIndex] = 0;
+
+            //Doctor 2
+            lastDoctorIndex++;
+            doctorNames[lastDoctorIndex] = "Dr. Salem";
+            doctorAvailableSlots[lastDoctorIndex] = 3;
+            doctorVisitCount[lastDoctorIndex] = 0;
+            //Doctor 3
+            lastDoctorIndex++;
+            doctorNames[lastDoctorIndex] = "Dr. Hana";
+            doctorAvailableSlots[lastDoctorIndex] = 8;
+            doctorVisitCount[lastDoctorIndex] = 0;
+
         }
         static void Main(string[] args)
         {
@@ -691,7 +733,15 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                         exit = ExitSystem();
                         break;
+                        
+                    case 11:
+                      AddDoctor();
+                            break;
+                       
+                    case 12:
+                        break;
                 } 
+
 
                 if (!exit)
                 {
