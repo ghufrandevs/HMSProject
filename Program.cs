@@ -9,7 +9,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
         // Used to calculate total doctor salary in a clear and maintainable way.
         const double BASE_SALARY = 300;
         const double BONUS_PER_VISIT = 15;
-        //
+        // Use one static Random instance to avoid duplicate random values (better randomness).
+        static Random rand = new Random();
         static string[] patientNames = new string[100];
         static string[] patientIDs = new string[100];
         static string[] diagnoses = new string[100];
@@ -140,25 +141,45 @@ namespace ConsoleApp1ManagingHealthcareClinic
         //used in case 3 (AskCharge): Prompts user for optional charges and returns the entered amount if valid.
         public static double AskCharge(string question)
         {
-            Console.WriteLine(question);
-            string answer = (Console.ReadLine() ?? string.Empty).ToLower();
-            if (answer == "yes")
+            while (true)
             {
-                Console.WriteLine("Enter amount:");
-                if (double.TryParse(Console.ReadLine(), out double amount) && amount > 0)
+                Console.WriteLine(question);
+                string answer = (Console.ReadLine() ?? string.Empty).Trim().ToLower();
+
+                if (answer == "yes")
                 {
+                    Console.WriteLine("Enter amount:");
+
+                    double amount = 0;
+
+                    try
+                    {
+                        amount = double.Parse(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid amount. Please enter a valid number.");
+                        continue;
+                    }
+
+                    if (amount <= 0)
+                    {
+                        Console.WriteLine("Amount must be greater than 0.");
+                        continue;
+                    }
+
                     return amount;
                 }
-               
+                else if (answer == "no")
+                {
+                    return 0;
+                }
                 else
                 {
-                    Console.WriteLine("Invalid amount entered. No charge added.");
+                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
                 }
-                   
-                }
-            return 0;
+            }
         }
-
         //used in case 8 : Searches and displays patients belonging to a specific department (case-insensitive).
         public static void SearchDepartment()
         {
@@ -358,7 +379,6 @@ namespace ConsoleApp1ManagingHealthcareClinic
         //used in case 9
         static int Randomdiscount()
         {
-            Random rand = new Random();
             return rand.Next(5, 21);
         }
 
@@ -386,7 +406,6 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("Total Days: " + daysInHospital[foundPatient]);
 
                 // Random discount
-                Random rand = new Random();
                 int discount = Randomdiscount();
 
                 double discounted = billingAmount[foundPatient] - (billingAmount[foundPatient] * discount / 100);
@@ -459,8 +478,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
             string newDoctor = (Console.ReadLine() ?? string.Empty).Trim();
             //new
             // Normalize format
-            currentDoctor = currentDoctor.Replace("Dr ", "Dr. ");
-            newDoctor = newDoctor.Replace("Dr ", "Dr. ");
+            currentDoctor = currentDoctor.Replace("Dr ", "Dr. ").Trim().ToLower();
+            newDoctor = newDoctor.Replace("Dr ", "Dr. ").Trim().ToLower();
             if (currentDoctor == newDoctor)
             {
                 Console.WriteLine(" the doctor names must be different");  
@@ -753,10 +772,9 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                 }
 
-                catch (Exception ex)
+                catch (FormatException)
                 {
                     Console.WriteLine("Invalid input. Please choose a number from 1 to 10");
-                    Console.WriteLine(ex.Message);
                 }
 
                 switch (option)
@@ -765,7 +783,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                     case 1:
                            
                         // Read and validate name
-                        Console.WriteLine("Enter patient Name :");
+                        Console.WriteLine("Enter Patient Name :");
                         string name = (Console.ReadLine() ?? string.Empty).Trim();
 
                         while (string.IsNullOrWhiteSpace(name))
@@ -773,7 +791,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                             Console.WriteLine("Name cannot be empty. Please re-enter:");
                             name = (Console.ReadLine() ?? string.Empty).Trim();
                         }
-                        Console.WriteLine("Enter  diagnosis :");
+                        Console.WriteLine("Enter  Diagnosis :");
                         string diagnose= (Console.ReadLine() ?? string.Empty).Trim();
 
                         while (string.IsNullOrWhiteSpace(diagnose))
@@ -781,7 +799,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                             Console.WriteLine("Diagnosis cannot be empty:");
                             diagnose = (Console.ReadLine() ?? string.Empty).Trim();
                         }
-                        Console.WriteLine("Enter department");
+                        Console.WriteLine("Enter Department");
                         string department= (Console.ReadLine() ?? string.Empty).Trim();
 
                         while (string.IsNullOrWhiteSpace(department))
@@ -789,7 +807,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                             Console.WriteLine("Department cannot be empty:");
                             department = (Console.ReadLine() ?? string.Empty).Trim();
                         }
-                        Console.WriteLine("Enter blood type : ");
+                        Console.WriteLine("Enter Blood type : ");
                         string typeBlood = (Console.ReadLine() ?? string.Empty).Trim();
                         //Check array capacity before adding a new patient.
                         // Prevents index out of range error when the registry is full.
@@ -827,15 +845,15 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         Console.WriteLine("Enter the patient Id or name : ");
                         string key = (Console.ReadLine() ?? string.Empty);
 
-                        int SearchFound = SearchPatient(key);
+                        int searchFound = SearchPatient(key);
 
-                        if (SearchFound == -1)
+                        if (searchFound == -1)
                         {
                             Console.WriteLine("Patient not found");
                         }
                         else
                         {
-                            PrintPatient(SearchFound);
+                            PrintPatient(searchFound);
                         }
                         break;
 
