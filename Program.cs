@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
-using System.Numerics;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿
+
 
 namespace ConsoleApp1ManagingHealthcareClinic
 {
     internal class Program
     {
-       static string[] patientNames = new string[100];
+        // Base salary for each doctor and additional bonus earned per patient visit.
+        // Used to calculate total doctor salary in a clear and maintainable way.
+        const double BASE_SALARY = 300;
+        const double BONUS_PER_VISIT = 15;
+        //
+        static string[] patientNames = new string[100];
         static string[] patientIDs = new string[100];
         static string[] diagnoses = new string[100];
         static bool[] admitted = new bool[100];       // true = currently admitted
@@ -33,7 +35,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             Console.WriteLine("Thank you for using the Managing Health Care System.");
             Console.WriteLine("Are you sure you want to exit? (yes/no)");
 
-            string input = Console.ReadLine().ToLower();
+            string input = (Console.ReadLine() ?? string.Empty).ToLower();
 
             if (input == "yes")
             {
@@ -52,14 +54,15 @@ namespace ConsoleApp1ManagingHealthcareClinic
             }
         }
         //case 11 
-        static public void AddDoctor()
+        public static void AddDoctor()
         {
             Console.WriteLine("Enter the Doctor name : ");
-            string DoctorName = Console.ReadLine().Trim();
+            string doctorName = (Console.ReadLine() ?? string.Empty).Trim();
+            doctorName = doctorName.Replace("Dr ", "Dr. ");
 
             for (int i = 0; i <= lastDoctorIndex; i++)
             {
-                if (DoctorName.ToLower() == doctorNames[i].ToLower())
+                if (doctorName.ToLower() == doctorNames[i].ToLower())
                 { 
                     Console.WriteLine("Doctor already exists in the system");
                     return;
@@ -76,18 +79,18 @@ namespace ConsoleApp1ManagingHealthcareClinic
             else
             {
                 lastDoctorIndex++;
-                doctorNames[lastDoctorIndex] = DoctorName;
+                doctorNames[lastDoctorIndex] = doctorName;
                 doctorAvailableSlots[lastDoctorIndex] = slots;
                 doctorVisitCount[lastDoctorIndex] = 0;
-                Console.WriteLine("Doctor " + DoctorName + " registered successfully with " + slots + " available slots.");
+                Console.WriteLine("Doctor " + doctorName + " registered successfully with " + slots + " available slots.");
             }
         }
 
         //case 12
-        static public void DoctorSalaryReport()
+        public static void DoctorSalaryReport()
         {
-            double Dsalary = 0;
-            double Maxsalary = 0;
+            double doctorSalary = 0;
+            double maxSalary = 0;
             int MaxIndex = -1;
 
             if (lastDoctorIndex == -1)
@@ -98,21 +101,21 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
             for (int i = 0; i <= lastDoctorIndex; i++)
             {
-                Dsalary = (300 + (doctorVisitCount[i] * 15));
-                Dsalary = Math.Round(Dsalary, 2);
-                Console.WriteLine("Dr. " + doctorNames[i] + "|| visit: " + doctorVisitCount[i] + "|| Available Slot: " + doctorAvailableSlots[i] + "|| salary: " + Dsalary);
+                doctorSalary = BASE_SALARY + (doctorVisitCount[i] * BONUS_PER_VISIT);
+                doctorSalary = Math.Round(doctorSalary, 2);
+                Console.WriteLine("Dr. " + doctorNames[i] + "|| visit: " + doctorVisitCount[i] + "|| Available Slot: " + doctorAvailableSlots[i] + "|| salary: " + doctorSalary);
 
                
                 if (i == 0)
                 {
-                    Maxsalary = Dsalary;
+                    maxSalary = doctorSalary;
                     MaxIndex = 0;
                 }
                 else
                 {
-                    if (Dsalary > Maxsalary)
+                    if (doctorSalary > maxSalary)
                     {
-                        Maxsalary = Dsalary;
+                        maxSalary = doctorSalary;
                         MaxIndex = i;
                     }
                 }
@@ -120,14 +123,14 @@ namespace ConsoleApp1ManagingHealthcareClinic
             Console.WriteLine("----------------------");
             Console.WriteLine("Highest earning doctor: " +
             doctorNames[MaxIndex] + " — " +
-            Math.Round(Maxsalary, 2) + " OMR");
+            Math.Round(maxSalary, 2) + " OMR");
         }
-       
+
         //used in case 3
-        static public double AskCharge(string question)
+        public static double AskCharge(string question)
         {
             Console.WriteLine(question);
-            string answer = Console.ReadLine().ToLower();
+            string answer = (Console.ReadLine() ?? string.Empty).ToLower();
             if (answer == "yes")
             {
                 Console.WriteLine("Enter amount:");
@@ -144,13 +147,13 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 }
             return 0;
         }
-        
+
         //used in case 8
-        static public void SearchDepartment()
+        public static void SearchDepartment()
         {
             //Search Patients by Department
             Console.WriteLine("Enter the Department : ");
-            string SearchDep = Console.ReadLine().ToLower();
+            string SearchDep = (Console.ReadLine() ?? string.Empty).ToLower();
 
             //  NEW (header uppercase) 
             Console.WriteLine("Patients in department '" + SearchDep.ToUpper() + "':");
@@ -200,9 +203,9 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
 
         }
-        
+
         //case 3
-        static public void DischargePatient()
+        public static void DischargePatient()
         {
             Console.WriteLine("Enter Patient ID or name :");
             string DkeyPatient = Console.ReadLine();
@@ -272,10 +275,10 @@ namespace ConsoleApp1ManagingHealthcareClinic
         }
 
         //case 2
-        static void AdmitPatient()
+        public static void AdmitPatient()
             {
                 Console.WriteLine("Enter Patient ID or name :");
-                string keyPatient = Console.ReadLine();
+                string keyPatient = (Console.ReadLine() ?? string.Empty);
 
                 int search = SearchPatient(keyPatient);
 
@@ -293,12 +296,13 @@ namespace ConsoleApp1ManagingHealthcareClinic
                     {
                     //
                         Console.WriteLine("Enter Doctor Name :");
-                        string DoctorInput = Console.ReadLine().Trim();
+                        string doctorInput = (Console.ReadLine() ?? string.Empty).Trim();
+                        doctorInput = doctorInput.Replace("Dr ", "Dr. ");
                         int doctorIndex = -1;
                         for(int i = 0;i<=lastDoctorIndex;i++)
                     {
 
-                        if(DoctorInput.ToLower()==doctorNames[i].ToLower())
+                        if(doctorInput.ToLower()==doctorNames[i].ToLower())
                         {
                             doctorIndex= i;
                             break;
@@ -347,10 +351,10 @@ namespace ConsoleApp1ManagingHealthcareClinic
             Random rand = new Random();
             return rand.Next(5, 21);
         }
-        static public void IndividualpatientBillingReport()
+        public static void IndividualpatientBillingReport()
         {
             Console.WriteLine("Enter patient ID :");
-            string patientID = Console.ReadLine();
+            string patientID = (Console.ReadLine() ?? string.Empty);
 
             int foundPatient = SearchPatient(patientID);
             if (foundPatient == -1)
@@ -378,8 +382,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("Discount applied: " + discount + "% — Amount after discount: " + Math.Round(discounted, 2) + " OMR");
             }
 
-        }  
-        static public void SystemWideTotalBilling()
+        }
+        public static void SystemWideTotalBilling()
         {
             double totalAmount = 0;
             double max = 0;
@@ -415,10 +419,10 @@ namespace ConsoleApp1ManagingHealthcareClinic
             }
         }
         //
-        static public void ViewMostVisit()
+        public static void ViewMostVisit()
         {
             Console.WriteLine("Most visited patient: ");
-            for (int Count = 100; Count >= 0; Count--)
+            for (int Count = lastPatientIndex; Count >= 0; Count--)
             {
                 for (int i = 0; i <= lastPatientIndex; i++)
                 {
@@ -431,12 +435,12 @@ namespace ConsoleApp1ManagingHealthcareClinic
         }
 
         //case6  6
-        static public void TransferDoctor()
+        public static void TransferDoctor()
         {
             Console.WriteLine("Enter Current Doctor Name :");
-            string CurrentDoctor = Console.ReadLine().Trim();
+            string CurrentDoctor = (Console.ReadLine() ?? string.Empty).Trim();
             Console.WriteLine("Enter New Doctor Name : ");
-            string NewDoctor = Console.ReadLine().Trim();
+            string NewDoctor = (Console.ReadLine() ?? string.Empty).Trim();
             //new
             // Normalize format
             CurrentDoctor = CurrentDoctor.Replace("Dr ", "Dr. ");
@@ -446,6 +450,13 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine(" the doctor names must be different");  
                 return;
             }
+            int currentDoctorIndex = SearchDoctor(CurrentDoctor);
+            int newDoctorIndex=SearchDoctor(NewDoctor);
+            if(currentDoctorIndex == -1||newDoctorIndex==-1)
+            {
+                Console.WriteLine("One of the doctors not found");
+                return;
+            }
 
             bool found = false;
 
@@ -453,12 +464,21 @@ namespace ConsoleApp1ManagingHealthcareClinic
             {
                 if (admitted[i] == true && assignedDoctors[i] == CurrentDoctor)
                 {
-                    assignedDoctors[i] = NewDoctor;
+                    if(doctorAvailableSlots[newDoctorIndex]<=0)
+                    {
+                        Console.WriteLine("New doctor has no slots");
+                        return;
+                    }
 
+                    
+                    assignedDoctors[i] = NewDoctor;
+                    doctorAvailableSlots[newDoctorIndex]--;
+                    doctorAvailableSlots[currentDoctorIndex]++;
                     Console.WriteLine("Patient " + patientNames[i] + " has been transferred to " + NewDoctor);
                     Console.WriteLine("Patient last admitted on " + lastVisitDate[i].ToString("yyyy-MM-dd"));
-
                     found = true;
+                    break;
+                    
                 }
             }
 
@@ -480,7 +500,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
         static string GetKeyword()
         {
             Console.WriteLine("Filter by name keyword (press Enter to skip): ");
-            return Console.ReadLine().ToLower();
+            return (Console.ReadLine() ?? string.Empty).ToLower();
         }
 
         static void PrintPatient(int i)
@@ -524,7 +544,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
             Console.WriteLine("Total Days in Hospital:" + daysInHospital[i]);
         }
-        static public void ListAdmittedPatient()
+        public static void ListAdmittedPatient()
         {
         string keyword = GetKeyword();
 
@@ -556,8 +576,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("Highest billing among admitted patients: " + Math.Round(maxBilling, 2) + " OMR");
 
             }
-        }  
-        static public int SearchDoctor(string DoctorName)
+        }
+        public static int SearchDoctor(string DoctorName)
         {
             DoctorName=DoctorName.Trim().ToLower();
             int found = -1;
@@ -570,23 +590,25 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 }
             }
             return found;
-        }     
-        
-        static public int SearchPatient(string SearchInput)
+        }
+
+        public static int SearchPatient(string SearchInput)
         {
             int found = -1;
+            string input = SearchInput.ToLower();
             for (int i = 0; i <= lastPatientIndex; i++)
             {
-                if (SearchInput == patientIDs[i] || SearchInput == patientNames[i])
+                if (SearchInput == patientIDs[i] ||
+           (patientNames[i] != null && patientNames[i].ToLower() == input))
                 {
                     found = i;
                     break;
                 }
             }
             return found;
-        }     
+        }
 
-        static public string RegisterPatient(string patientNames, string diagnoses, string departments, string bloodType)
+        public static string RegisterPatient()
         {
             Console.WriteLine("Registering new patient ......");
 
@@ -620,7 +642,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("12. Doctor Salary Report");
 
         }
-        static public void seedData()
+        public static void seedData()
         {
 
             //Patient 1
@@ -717,23 +739,38 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 switch (option)
                 {
                     case 1://register new patienr
-
-                        lastPatientIndex++;
-
+                           
+                        // Read and validate name
                         Console.WriteLine("Enter patient Name :");
-                        patientNames[lastPatientIndex] = Console.ReadLine().Trim();
+                        string name = (Console.ReadLine() ?? string.Empty).Trim();
+
+                        while (string.IsNullOrWhiteSpace(name))
+                        {
+                            Console.WriteLine("Name cannot be empty. Please re-enter:");
+                            name = (Console.ReadLine() ?? string.Empty).Trim();
+                        }
                         Console.WriteLine("Enter  diagnosis :");
-                        diagnoses[lastPatientIndex] = Console.ReadLine().Trim();
+                        string diagnose= (Console.ReadLine() ?? string.Empty).Trim();
+                        
                         Console.WriteLine("Enter department");
-                        departments[lastPatientIndex] = Console.ReadLine().Trim();
+                        string department= (Console.ReadLine() ?? string.Empty).Trim();
+                       
                         Console.WriteLine("Enter blood type : ");
-                        bloodType[lastPatientIndex] = Console.ReadLine().ToUpper();
-
-                        string PId = RegisterPatient(patientNames[lastPatientIndex], diagnoses[lastPatientIndex], departments[lastPatientIndex], bloodType[lastPatientIndex]);
+                        string BloodType = (Console.ReadLine() ?? string.Empty).Trim();
+                        //Check array capacity before adding a new patient.
+                        // Prevents index out of range error when the registry is full.
+                        if (lastPatientIndex >= patientNames.Length - 1)
+                        {
+                            Console.WriteLine("Patient registry is full. Cannot register more patients.");
+                            break;
+                        }
+                        lastPatientIndex++;
+                        patientNames[lastPatientIndex] = name;
+                        diagnoses[lastPatientIndex] = diagnose;
+                        departments[lastPatientIndex] = department;
+                        bloodType[lastPatientIndex] = BloodType.ToUpper();
+                        string PId = RegisterPatient();
                         Console.WriteLine("Patient ID : " + PId);
-
-
-
 
                         break;
 
@@ -757,7 +794,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
                     case 4:  
                         //search patient 
                         Console.WriteLine("Enter the patient Id or name : ");
-                        string key = Console.ReadLine();
+                        string key = (Console.ReadLine() ?? string.Empty);
 
                         int SearchFound = SearchPatient(key);
 
@@ -802,17 +839,11 @@ namespace ConsoleApp1ManagingHealthcareClinic
                         Console.WriteLine("1.System-wide total");
                         Console.WriteLine("2.Individual patient");
 
-                        int options = 0;
                         double totalAmount = 0;
 
-                        try
+                        if (!int.TryParse(Console.ReadLine(), out int options))
                         {
-                            options = int.Parse(Console.ReadLine());
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("Invalid input. Please enter 1 or 2 ");
-                            Console.WriteLine(ex.Message);
+                            Console.WriteLine("Invalid input. Please enter 1 or 2.");
                             continue;
                         }
 
