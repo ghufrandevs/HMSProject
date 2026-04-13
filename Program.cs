@@ -29,7 +29,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
         static int[] doctorVisitCount = new int[50];
         static int lastDoctorIndex = -1;
 
-
+        //// Handles system exit confirmation (yes/no) and returns whether to terminate the program.
         static bool ExitSystem()
         {
             Console.WriteLine("Thank you for using the Managing Health Care System.");
@@ -53,7 +53,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 return false;
             }
         }
-        //case 11 
+
+        //case 11 : Registers a new doctor with available slots after validating input and preventing duplicates.
         public static void AddDoctor()
         {
             Console.WriteLine("Enter the Doctor name : ");
@@ -86,12 +87,12 @@ namespace ConsoleApp1ManagingHealthcareClinic
             }
         }
 
-        //case 12
+        //case 12 : Calculates and displays each doctor's salary based on visits, and identifies the highest earner.
         public static void DoctorSalaryReport()
         {
             double doctorSalary = 0;
             double maxSalary = 0;
-            int MaxIndex = -1;
+            int maxIndex = -1;
 
             if (lastDoctorIndex == -1)
             {
@@ -109,24 +110,24 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 if (i == 0)
                 {
                     maxSalary = doctorSalary;
-                    MaxIndex = 0;
+                    maxIndex = 0;
                 }
                 else
                 {
                     if (doctorSalary > maxSalary)
                     {
                         maxSalary = doctorSalary;
-                        MaxIndex = i;
+                        maxIndex = i;
                     }
                 }
             }
             Console.WriteLine("----------------------");
             Console.WriteLine("Highest earning doctor: " +
-            doctorNames[MaxIndex] + " — " +
+            doctorNames[maxIndex] + " — " +
             Math.Round(maxSalary, 2) + " OMR");
         }
 
-        //used in case 3
+        //used in case 3 (AskCharge): Prompts user for optional charges and returns the entered amount if valid.
         public static double AskCharge(string question)
         {
             Console.WriteLine(question);
@@ -148,7 +149,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             return 0;
         }
 
-        //used in case 8
+        //used in case 8 : Searches and displays patients belonging to a specific department (case-insensitive).
         public static void SearchDepartment()
         {
             //Search Patients by Department
@@ -204,7 +205,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
         }
 
-        //case 3
+        //case 3 : Discharges a patient, updates billing, frees doctor slot, and records discharge details.
         public static void DischargePatient()
         {
             Console.WriteLine("Enter Patient ID or name :");
@@ -274,7 +275,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             
         }
 
-        //case 2
+        //case 2: Admits a patient, assigns a doctor if available, and updates visit count and doctor slots.
         public static void AdmitPatient()
             {
                 Console.WriteLine("Enter Patient ID or name :");
@@ -351,6 +352,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             Random rand = new Random();
             return rand.Next(5, 21);
         }
+        //use in case 12 (IndividualpatientBillingReport() :Displays billing details for a specific patient, including discount calculation.
         public static void IndividualpatientBillingReport()
         {
             Console.WriteLine("Enter patient ID :");
@@ -418,7 +420,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                 Console.WriteLine("Lowest individual billing: " + Math.Round(min, 2) + " OMR");
             }
         }
-        //
+
+        //case 7 ViewMostVisit() : Displays patients sorted by visit count in descending order.
         public static void ViewMostVisit()
         {
             Console.WriteLine("Most visited patient: ");
@@ -434,9 +437,12 @@ namespace ConsoleApp1ManagingHealthcareClinic
             }
         }
 
-        //case6  6
+        //case6  6:Transfers a patient from one doctor to another and updates doctor slot availability.
+        
         public static void TransferDoctor()
         {
+            // NOTE: Only the first matching patient is transferred.
+            // The loop stops after one transfer using 'break' to prevent moving all patients under the same doctor.
             Console.WriteLine("Enter Current Doctor Name :");
             string CurrentDoctor = (Console.ReadLine() ?? string.Empty).Trim();
             Console.WriteLine("Enter New Doctor Name : ");
@@ -488,6 +494,7 @@ namespace ConsoleApp1ManagingHealthcareClinic
             }
         }
 
+        // Checks if a patient matches the search keyword and is currently admitted.
         static bool IsMatch(int i,string keyword)
         {
                 if (patientNames[i] == null)
@@ -497,6 +504,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
                        (string.IsNullOrEmpty(keyword) ||
                         patientNames[i].ToLower().Contains(keyword.ToLower()));
             }
+
+        // Reads and returns a keyword for filtering patients.
         static string GetKeyword()
         {
             Console.WriteLine("Filter by name keyword (press Enter to skip): ");
@@ -595,11 +604,13 @@ namespace ConsoleApp1ManagingHealthcareClinic
         public static int SearchPatient(string SearchInput)
         {
             int found = -1;
-            string input = SearchInput.ToLower();
+            string input = (SearchInput ?? string.Empty).ToLower();
             for (int i = 0; i <= lastPatientIndex; i++)
             {
-                if (SearchInput == patientIDs[i] ||
-           (patientNames[i] != null && patientNames[i].ToLower() == input))
+                //// IMPROVEMENT: Made patient ID and name search case-insensitive
+                // to allow flexible user input regardless of letter casing.
+                if ((patientIDs[i] != null && patientIDs[i].ToLower() == input) ||
+                (patientNames[i] != null && patientNames[i].ToLower() == input))
                 {
                     found = i;
                     break;
@@ -738,7 +749,8 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                 switch (option)
                 {
-                    case 1://register new patienr
+                    //register new patienr
+                    case 1:
                            
                         // Read and validate name
                         Console.WriteLine("Enter patient Name :");
@@ -774,21 +786,18 @@ namespace ConsoleApp1ManagingHealthcareClinic
 
                         break;
 
-
+                    //Admit Patient: Handles admitting an existing patient and assigning them to a doctor.
                     case 2:
-                        //Admit Patient
+                        
                         AdmitPatient();
                         break;
 
+                    // Discharge Patient :Handles patient discharge process and updates billing and hospital stay data.
                     case 3:
-                        // Discharge Patient
+                         
                         DischargePatient();
 
-
-                        break;
-
-
-                       
+                        break; 
 
 
                     case 4:  
